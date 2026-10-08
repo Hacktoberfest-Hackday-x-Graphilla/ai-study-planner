@@ -1,0 +1,632 @@
+/* =========================================================
+   AI STUDY PLANNER - style.css
+   1 Colors | 2 Page | 3 Cards | 4 Form | 5 Buttons | 6 Subject list
+   7 Today | 8 Table | 9 Syllabus upload | 10 Pomodoro | 11 Phones
+   ========================================================= */
+
+
+/* ---------- 1. COLORS (change the whole theme here) ---------- */
+:root {
+  --bg:           #f2f5f9;
+  --card:         #ffffff;
+  --text:         #1c2a44;
+  --muted:        #5b6b86;
+  --border:       #d5dde8;
+  --primary:      #0e7c86;
+  --primary-dark: #0a5f67;
+  --good:         #1f7a4d;
+  --bad:          #b4432c;
+  --tip-bg:       #eaf5f6;
+  --radius:       12px;
+}
+
+/* Dark mode switches on automatically with the device setting */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:           #0f1624;
+    --card:         #18223a;
+    --text:         #e8edf7;
+    --muted:        #9aa8c2;
+    --border:       #2b3857;
+    --primary:      #3bb5c0;
+    --primary-dark: #5cc8d2;
+    --good:         #58c48c;
+    --bad:          #f08a72;
+    --tip-bg:       #1d2c47;
+  }
+}
+
+
+/* ---------- 2. PAGE BASICS ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 16px 56px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 2rem;
+  letter-spacing: -0.01em;
+}
+
+/* the intro sentence under the title */
+body > p {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+h3 {
+  margin: 0 0 8px;
+}
+
+
+/* ---------- 3. CARDS ---------- */
+.card {
+  margin-bottom: 16px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+
+/* ---------- 4. FORM (Section 1) ---------- */
+/* The first card is a flexible row that wraps on small screens */
+section.card:first-of-type {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* these items always take the full row */
+section.card:first-of-type h2,
+section.card:first-of-type ul,
+section.card:first-of-type label {
+  flex-basis: 100%;
+}
+
+input,
+select {
+  padding: 10px 12px;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+#name {
+  flex: 1 1 200px;          /* grows to fill the free space */
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+#hours {
+  width: 80px;
+}
+
+/* clear keyboard focus on every control */
+input:focus,
+select:focus,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+
+/* ---------- 5. BUTTONS ---------- */
+button {
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Section 2 buttons: green = done, red = missed */
+#doneBtn,
+#missedBtn {
+  margin: 16px 8px 0 0;
+}
+
+#doneBtn   { background: var(--good); }
+#missedBtn { background: var(--bad); }
+
+#doneBtn:hover,
+#missedBtn:hover {
+  opacity: 0.88;
+}
+
+
+/* ---------- 6. SUBJECT LIST ---------- */
+#subjectList {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+#subjectList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+/* small outlined "Remove" button */
+#subjectList button {
+  padding: 4px 10px;
+  font-size: 13px;
+  color: var(--bad);
+  background: transparent;
+  border: 1px solid var(--bad);
+}
+
+#subjectList button:hover {
+  color: #fff;
+  background: var(--bad);
+}
+
+
+/* ---------- 7. TODAY'S PLAN ---------- */
+#today p {
+  margin: 0;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+#today small {
+  color: var(--muted);
+}
+
+/* the AI tip box */
+#today #tip {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--tip-bg);
+  border-bottom: none;
+  border-left: 4px solid var(--primary);
+  border-radius: 6px;
+}
+
+
+/* ---------- 8. FULL SCHEDULE TABLE ---------- */
+#schedule {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+#schedule th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#schedule th,
+#schedule td {
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* striped rows make long schedules easier to read */
+#schedule tr:nth-child(even) td {
+  background: var(--bg);
+}
+
+
+/* ---------- 9. SYLLABUS UPLOAD ---------- */
+#syllabus {
+  flex: 1;
+}
+
+#scanStatus {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+#scanStatus:empty {
+  display: none;
+}
+
+
+/* ---------- 10. POMODORO TIMER (fully responsive) ---------- */
+
+/* ---------- 10. POMODORO TIMER ---------- */
+#pomodoro {
+  --pomo:       #14b89c;
+  --pomo-dark:  #0f9c83;
+  --pill:       #eef0f3;
+  --track:      #e6eaef;
+
+  max-width: 440px;
+  margin: 0 auto 16px;
+  padding: 22px;
+  text-align: center;
+  border-color: rgba(20, 184, 156, 0.5);
+  border-radius: 22px;
+}
+
+@media (prefers-color-scheme: dark) {
+  #pomodoro {
+    --pill:  #222e48;
+    --track: #2b3857;
+  }
+}
+
+/* all icons in the timer share one style */
+#pomodoro svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* --- header --- */
+.pomo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pomo-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.pomo-header h2 svg {
+  color: var(--pomo);
+}
+
+/* round icon buttons: collapse, reset, settings */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  border-radius: 50%;
+}
+
+.icon-btn:hover {
+  color: var(--text);
+  background: var(--pill);
+}
+
+/* the X turns into a + when the card is collapsed */
+#collapseBtn svg {
+  transition: transform 0.2s;
+}
+
+#pomodoro.collapsed #collapseBtn svg {
+  transform: rotate(45deg);
+}
+
+#pomodoro.collapsed .pomo-body {
+  display: none;
+}
+
+#pomodoro.collapsed .pomo-header {
+  margin-bottom: 0;
+}
+
+/* --- Focus / Short / Long tabs --- */
+.pomo-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  margin-bottom: 22px;
+  background: var(--pill);
+  border-radius: 99px;
+}
+
+.pomo-tabs button {
+  flex: 1;
+  padding: 10px 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border-radius: 99px;
+}
+
+.pomo-tabs button:hover {
+  color: var(--text);
+  background: transparent;
+}
+
+.pomo-tabs button.active,
+.pomo-tabs button.active:hover {
+  color: #fff;
+  background: var(--pomo);
+}
+
+/* --- big time and mode name --- */
+#timerDisplay {
+  font-size: clamp(3.5rem, 18vw, 5.5rem);   /* grows and shrinks with the screen */
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;       /* digits keep the same width */
+  color: var(--text);
+}
+
+#timerMode {
+  margin: 6px 0 22px;
+  color: var(--muted);
+}
+
+/* --- progress bar --- */
+.pomo-progress {
+  height: 8px;
+  overflow: hidden;
+  background: var(--track);
+  border-radius: 99px;
+}
+
+#progressFill {
+  width: 0;
+  height: 100%;
+  background: var(--pomo);
+  border-radius: 99px;
+  transition: width 0.25s linear;
+}
+
+/* --- session dots --- */
+.pomo-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.pomo-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--track);
+  border-radius: 50%;
+}
+
+.pomo-dot.done {
+  background: var(--pomo);
+}
+
+.pomo-dot.current {
+  background: var(--pomo);
+  box-shadow: 0 0 0 3px rgba(20, 184, 156, 0.25);
+}
+
+/* --- controls row --- */
+.pomo-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.start-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--pomo);
+  border-radius: 99px;
+}
+
+.start-btn:hover {
+  background: var(--pomo-dark);
+}
+
+/* play icon is solid; pause icon shows only while running */
+.icon-play,
+.icon-pause {
+  display: inline-flex;
+}
+
+.icon-play svg {
+  fill: currentColor;
+}
+
+.icon-pause {
+  display: none;
+}
+
+.icon-pause svg {
+  fill: currentColor;
+}
+
+#pomodoro.running .icon-play {
+  display: none;
+}
+
+#pomodoro.running .icon-pause {
+  display: inline-flex;
+}
+
+/* --- settings panel --- */
+.pomo-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 18px;
+  text-align: left;
+  border-top: 1px solid var(--border);
+}
+
+.pomo-settings[hidden] {
+  display: none;
+}
+
+#pomodoro label {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  margin: 0;
+  font-size: 13px;
+}
+
+#pomodoro input[type="number"] {
+  width: 100%;
+  font-size: 16px;                 /* stops iPhones zooming in when you tap */
+}
+
+/* the three on/off switches */
+#pomodoro label.check {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  grid-column: 1 / -1;
+  font-size: 14px;
+  color: var(--text);
+}
+
+#pomodoro input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  accent-color: var(--pomo);
+}
+
+#timerCount {
+  margin: 18px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* small phones */
+@media (max-width: 420px) {
+  #pomodoro {
+    padding: 16px;
+  }
+
+  .pomo-tabs button {
+    padding: 9px 4px;
+    font-size: 14px;
+  }
+}
+
+/* people who turned off animations on their device */
+@media (prefers-reduced-motion: reduce) {
+  #progressFill,
+  #collapseBtn svg {
+    transition: none;
+  }
+/* Very small phones: Start gets its own full row */
+@media (max-width: 380px) {
+  #startBtn {
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+
+/* Phone held sideways: ring on the left, controls on the right */
+@media (max-height: 480px) and (orientation: landscape) {
+  #pomodoro {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 24px;
+    align-items: center;
+  }
+
+  #pomodoro h2 {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: left;
+  }
+
+  .timer-ring {
+    grid-row: 2 / 5;
+    width: min(50vh, 200px);
+    margin: 0;
+  }
+
+  .timer-settings,
+  #timerCount {
+    margin: 0;
+  }
+}
+
+/* People who turned off animations on their device */
+@media (prefers-reduced-motion: reduce) {
+  .ring-fg {
+    transition: none;
+  }
+}
+
+
+/* ---------- 11. PHONES ---------- */
+@media (max-width: 560px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  /* every control fills the row */
+  input,
+  select,
+  #addBtn,
+  #doneBtn,
+  #missedBtn {
+    width: 100%;
+  }
+
+  #hours {
+    width: 80px;
+  }
+
+  #schedule td {
+    font-size: 13px;
+  }
+}

@@ -8,24 +8,21 @@
 </head>
 <body>
   <h1>AI Study Planner</h1>
-  <p>Add your exams. The planner makes a daily schedule and adjusts when you miss a day.</p>
+  <p>Add your exams and attach your syllabus. The planner scans it, makes a daily schedule, and adjusts when you miss a day.</p>
 
+  <!-- 1. ADD A SUBJECT -->
   <section class="card">
     <h2>1. Add a subject</h2>
     <input id="name" placeholder="Subject name">
     <input id="date" type="date">
-    <select id="difficulty">
-      <option value="1">1 - Easy</option>
-      <option value="2">2</option>
-      <option value="3" selected>3 - Medium</option>
-      <option value="4">4</option>
-      <option value="5">5 - Hard</option>
-    </select>
+    <label>Syllabus (PDF) <input id="syllabus" type="file" accept="application/pdf"></label>
     <button id="addBtn">Add</button>
+    <p id="scanStatus"></p>
     <ul id="subjectList"></ul>
     <label>Study hours per day <input id="hours" type="number" min="1" max="12" value="4"></label>
   </section>
 
+  <!-- 2. TODAY'S PLAN -->
   <section class="card">
     <h2>2. Today's plan</h2>
     <div id="today"></div>
@@ -33,21 +30,69 @@
     <button id="missedBtn">I missed today</button>
   </section>
 
-  <section class="card">
-    <h2>3. Full schedule</h2>
-    <table id="schedule"></table>
+  <!-- 3. POMODORO TIMER (kept outside #today so it is not reset by render) -->
+     <!-- 3. POMODORO TIMER (kept outside #today so it is not reset by render) -->
+  <section class="card" id="pomodoro">
+
+    <!-- Header: title + collapse button -->
+    <div class="pomo-header">
+      <h2>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+        Pomodoro
+      </h2>
+      <button id="collapseBtn" class="icon-btn" aria-label="Collapse timer" aria-expanded="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="pomo-body">
+
+      <!-- Focus / Short / Long tabs -->
+      <div class="pomo-tabs" role="tablist">
+        <button id="focusTab" role="tab" class="active">Focus</button>
+        <button id="breakTab" role="tab">Short</button>
+        <button id="longTab" role="tab">Long</button>
+      </div>
+
+      <!-- Time, mode name, progress bar, session dots -->
+      <div id="timerDisplay">25:00</div>
+      <p id="timerMode">Focus Time</p>
+      <div class="pomo-progress"><div id="progressFill"></div></div>
+      <div class="pomo-dots" id="pomoDots"></div>
+
+      <!-- Controls: reset, start/pause, settings -->
+      <div class="pomo-controls">
+        <button id="resetBtn" class="icon-btn" aria-label="Reset timer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+
+        <button id="startBtn" class="start-btn">
+          <span class="icon-play"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span>
+          <span class="icon-pause"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg></span>
+          <span id="startLabel">Start</span>
+        </button>
+
+        <button id="settingsBtn" class="icon-btn" aria-label="Timer settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+
+      <!-- Settings panel (opens with the gear button) -->
+      <div class="pomo-settings" id="pomoSettings" hidden>
+        <label>Focus (min) <input id="focusMin" type="number" min="1" max="90"></label>
+        <label>Short break (min) <input id="breakMin" type="number" min="1" max="30"></label>
+        <label>Long break (min) <input id="longMin" type="number" min="1" max="60"></label>
+        <label>Sessions before long break <input id="everyN" type="number" min="2" max="8"></label>
+        <label class="check"><input id="autoStart" type="checkbox"> Start the next session automatically</label>
+        <label class="check"><input id="soundOn" type="checkbox"> Play a sound when a session ends</label>
+        <label class="check"><input id="notifyOn" type="checkbox"> Show a desktop notification</label>
+      </div>
+
+      <p id="timerCount">Focus sessions today: 0</p>
+    </div>
   </section>
-<section class="card" id="pomodoro">
-    <h2>3. Pomodoro timer</h2>
-    <p id="timerMode">Focus time</p>
-    <div id="timerDisplay">25:00</div>
-    <button id="startBtn">Start</button>
-    <button id="pauseBtn">Pause</button>
-    <button id="resetBtn">Reset</button>
-    <label>Focus minutes <input id="focusMin" type="number" min="1" max="90" value="25"></label>
-    <label>Break minutes <input id="breakMin" type="number" min="1" max="30" value="5"></label>
-    <p id="timerCount">Focus sessions today: 0</p>
-  </section>
+  
   <script src="script.js"></script>
+  <script src="pomodoro.js"></script>
 </body>
 </html>
